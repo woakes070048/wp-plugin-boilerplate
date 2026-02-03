@@ -31,4 +31,14 @@ class AboutTab implements TabContract
         echo '<h2>About</h2>';
         echo '<p>This plugin is built on an opinionated boilerplate.</p>';
     }
+
+    public function viewCapability(): string
+    {
+        return 'read';
+    }
+
+    public function manageCapability(): string
+    {
+        return 'do_not_allow';
+    }
 }

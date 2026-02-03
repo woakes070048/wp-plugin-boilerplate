@@ -7,10 +7,19 @@ interface TabContract
     public function id(): string;
     public function label(): string;
 
-    // Capability flags
     public function hasForm(): bool;
     public function hasActions(): bool;
 
-    // Render content only (never form or buttons)
+    /**
+     * Capability required to view the tab
+     */
+    public function viewCapability(): string;
+
+    /**
+     * Capability required to modify settings
+     */
+    public function manageCapability(): string;
+
     public function render(): void;
 }
+

@@ -47,4 +47,20 @@ class GeneralTab implements SettingsTabContract
         settings_fields(self::optionKey());
         do_settings_sections(self::optionKey());
     }
+
+    public function viewCapability(): string
+    {
+        return 'manage_options';
+    }
+
+    public function manageCapability(): string
+    {
+        return 'manage_options';
+    }
+
+    public static function scope(): string
+    {
+        return 'site';
+    }
+
 }

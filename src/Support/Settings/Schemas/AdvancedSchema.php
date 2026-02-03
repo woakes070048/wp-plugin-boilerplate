@@ -29,4 +29,18 @@ class AdvancedSchema
             self::definition()
         );
     }
+
+    public static function version(): int
+    {
+        return 2;
+    }
+
+    public static function migrate(array $old, int $fromVersion): array
+    {
+        if ($fromVersion < 2) {
+            $old['api_timeout'] = $old['api_timeout'] ?? 30;
+        }
+
+        return $old;
+    }
 }

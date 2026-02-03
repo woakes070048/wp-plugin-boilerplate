@@ -2,6 +2,8 @@
 
 namespace WPPluginBoilerplate\Admin;
 
+use WPPluginBoilerplate\Admin\Actions\ExportSettings;
+use WPPluginBoilerplate\Admin\Actions\ImportSettings;
 use WPPluginBoilerplate\Admin\Actions\ResetSettings;
 use WPPluginBoilerplate\Loader;
 use WPPluginBoilerplate\Support\Settings;
@@ -16,6 +18,18 @@ class Admin
         $loader->action(
             'admin_post_wp_plugin_boilerplate_reset',
             new ResetSettings(),
+            'handle'
+        );
+
+        $loader->action(
+            'admin_post_wp_plugin_boilerplate_export',
+            new ExportSettings(),
+            'handle'
+        );
+
+        $loader->action(
+            'admin_post_wp_plugin_boilerplate_import',
+            new ImportSettings(),
             'handle'
         );
 
@@ -51,7 +65,7 @@ class Admin
 
         echo '</nav>';
 
-        if ($active->hasForm()) {
+        if ($active->hasForm() && current_user_can($active->manageCapability())) {
             echo '<form method="post" action="options.php">';
             $active->render();
 

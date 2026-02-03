@@ -47,4 +47,20 @@ class AdvancedTab implements SettingsTabContract
         settings_fields(self::optionKey());
         do_settings_sections(self::optionKey());
     }
+
+    public function viewCapability(): string
+    {
+        return 'manage_options';
+    }
+
+    public function manageCapability(): string
+    {
+        return 'update_core'; // intentionally stricter
+    }
+
+    public static function scope(): string
+    {
+        return 'network';
+    }
+
 }
