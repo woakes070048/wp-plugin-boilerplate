@@ -29,6 +29,19 @@ This repository is a **foundation**, not a demo plugin.
 - Namespace = folder structure
 - Case-sensitive always
 
+### 6. Tabs are first-class concepts
+- Admin screens are composed of tabs
+- Tabs may be:
+    - settings tabs (persist data)
+    - presentation-only tabs (About, Help, Docs)
+- Not all tabs save data, by design
+
+### 7. Settings are schema-driven and isolated
+- Each settings tab owns its own schema
+- Each settings tab persists data under its own option key
+- Defaults are defined centrally in schemas
+- Raw `get_option()` must not be used outside the settings layer
+
 ---
 
 ## Folder Responsibilities
@@ -41,6 +54,20 @@ This repository is a **foundation**, not a demo plugin.
 | `src/Support` | Shared helpers |
 | `assets/` | JS / CSS |
 | `languages/` | Translations |
+
+---
+
+## Settings Architecture
+
+- `TabContract` defines navigation and rendering
+- `SchemaContract` defines persistence, defaults, and sanitization
+- `SettingsTabContract` explicitly marks tabs that own settings
+
+Rules:
+- Tabs render content only
+- Tabs never render `<form>` tags or action buttons
+- UI chrome (forms, actions) is owned by the renderer
+- Informational tabs must never touch settings storage
 
 ---
 
