@@ -5,6 +5,7 @@ namespace WPPluginBoilerplate\Admin;
 use WPPluginBoilerplate\Admin\Actions\ExportSettings;
 use WPPluginBoilerplate\Admin\Actions\ImportSettings;
 use WPPluginBoilerplate\Admin\Actions\ResetSettings;
+use WPPluginBoilerplate\Admin\Settings\SettingsRegistrar;
 use WPPluginBoilerplate\Loader;
 use WPPluginBoilerplate\Support\Settings;
 use WPPluginBoilerplate\Support\Settings\Tabs;
@@ -14,6 +15,12 @@ class Admin
     public function register(Loader $loader): void
     {
         $loader->action('admin_menu', $this, 'register_menu');
+
+        $loader->action(
+            'admin_init',
+            new SettingsRegistrar(),
+            'register'
+        );
 
         $loader->action(
             'admin_post_wp_plugin_boilerplate_reset',
@@ -50,7 +57,7 @@ class Admin
 
     public function render_page(): void
     {
-        $tabs   = Tabs::all();
+        $tabs = Tabs::all();
         $active = Tabs::active();
 
         echo '<div class="wrap">';

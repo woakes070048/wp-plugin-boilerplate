@@ -4,8 +4,9 @@ namespace WPPluginBoilerplate\Support\Settings;
 
 use WPPluginBoilerplate\Support\Settings\Contracts\TabContract;
 use WPPluginBoilerplate\Support\Settings\Tabs\AboutTab;
-use WPPluginBoilerplate\Support\Settings\Tabs\AdvancedTab;
-use WPPluginBoilerplate\Support\Settings\Tabs\GeneralTab;
+use WPPluginBoilerplate\Support\Settings\Tabs\EnhancedFields;
+use WPPluginBoilerplate\Support\Settings\Tabs\CoreFields;
+use WPPluginBoilerplate\Support\Settings\Tabs\HelpTab;
 use WPPluginBoilerplate\Support\Settings\Tabs\ToolsTab;
 
 class Tabs
@@ -16,12 +17,34 @@ class Tabs
      */
     public static function all(): array
     {
-        return [
-            new GeneralTab(),
-            new AdvancedTab(),
+        $tabs = [
+            new CoreFields(),
+            new EnhancedFields(),
             new ToolsTab(),
             new AboutTab(),
+            new HelpTab(),
         ];
+
+        return array_values(
+            array_filter($tabs, function ($tab) {
+
+                // Settings tabs only
+                if (method_exists($tab, 'scope')) {
+
+                    // Network-only tab outside Network Admin
+                    if ($tab::scope() === 'network' && ! is_network_admin()) {
+                        return false;
+                    }
+                }
+
+                // Capability check
+                if (method_exists($tab, 'viewCapability')) {
+                    return current_user_can($tab->viewCapability());
+                }
+
+                return true;
+            })
+        );
     }
 
     /**

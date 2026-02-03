@@ -14,22 +14,22 @@ class Assets
 
     public function admin_assets(): void
     {
-        wp_enqueue_style(
-            'wp-plugin-boilerplate-admin',
-            plugin_dir_url(dirname(__DIR__, 2)) . 'assets/admin/admin.css',
-            [],
-            '1.0.0'
-        );
+        // Media
+        wp_enqueue_media();
+        wp_enqueue_script('wppb-media', WP_PLUGIN_BOILERPLATE_URL . 'assets/admin/js/media.js', ['jquery'], WP_PLUGIN_BOILERPLATE_VERSION, true);
+
+        // Color picker
+        wp_enqueue_style('wp-color-picker');
+        wp_enqueue_script('wp-color-picker');
+
+        // Init
+        wp_add_inline_script('wp-color-picker', "jQuery('.wppb-color-field').wpColorPicker();");
+
+        wp_enqueue_style('wppb-admin', WP_PLUGIN_BOILERPLATE_URL . 'assets/admin/css/admin.css', [], WP_PLUGIN_BOILERPLATE_VERSION, true);
     }
 
     public function public_assets(): void
     {
-        wp_enqueue_script(
-            'wp-plugin-boilerplate-public',
-            plugin_dir_url(dirname(__DIR__, 2)) . 'assets/public/public.js',
-            [],
-            '1.0.0',
-            true
-        );
+        wp_enqueue_script('wppb-public', plugin_dir_url(dirname(__DIR__, 2)) . 'assets/public/public.js', [], WP_PLUGIN_BOILERPLATE_VERSION, true);
     }
 }

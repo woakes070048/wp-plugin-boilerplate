@@ -1,13 +1,13 @@
 # How to Use This Boilerplate
 
-This document explains how to use the WP Plugin Boilerplate to build a real plugin.
+This document explains how to use the **WP Plugin Boilerplate** to build a real, maintainable WordPress plugin.
 
 It assumes you are familiar with:
 - WordPress plugin development
 - PHP namespaces and Composer
 - Basic WordPress admin concepts
 
-This is not a tutorial on WordPress itself.
+This is **not** a WordPress tutorial.
 
 ---
 
@@ -39,7 +39,7 @@ wp-plugin-boilerplate.php
 my-awesome-plugin.php
 ```
 
-Update the namespace everywhere:
+Update namespaces everywhere:
 
 ```
 WPPluginBoilerplate
@@ -47,7 +47,7 @@ WPPluginBoilerplate
 MyAwesomePlugin
 ```
 
-Then run:
+Then regenerate autoloading:
 
 ```bash
 composer dump-autoload
@@ -57,17 +57,19 @@ composer dump-autoload
 
 ## Step 2: Understand the Entry File
 
-The entry file exists only to wire the plugin together.
+The entry file exists only to **wire the plugin together**.
 
 It should:
 - load Composer autoload
 - register activation / deactivation hooks
-- instantiate the main Plugin class
+- instantiate the main `Plugin` class
 
-It must not contain:
+It must **not** contain:
 - business logic
 - conditionals
-- WordPress hooks
+- direct WordPress hooks
+
+Think of it as a handshake, not a brain.
 
 ---
 
@@ -81,8 +83,6 @@ To add new behavior:
     - `Public` → frontend behavior
     - `Support` → shared infrastructure
 3. Register hooks via the Loader
-
-### Example
 
 ```php
 class ExampleFeature
@@ -99,91 +99,77 @@ class ExampleFeature
 }
 ```
 
-Then register the feature in `Plugin.php`.
-
-No direct `add_action`. Ever.
+Never call `add_action()` directly.
 
 ---
 
 ## Step 4: Working With Settings
 
-Settings are built around tabs and schemas.
-
-### Creating a settings tab
-
-1. Create a schema class
-2. Create a tab class implementing `SettingsTabContract`
-3. Register the tab in the Tabs registry
+Settings are built around **tabs + schemas**.
 
 Each settings tab:
 - owns its schema
 - owns its option key
 - persists independently
 
-### Reading settings anywhere
-
-Never call `get_option()` directly.
-
-Always use the repository:
+Read settings via:
 
 ```php
 $settings = SettingsRepository::get(GeneralTab::class);
 ```
 
-Defaults are always applied automatically.
+---
+
+## Step 5: Defining Fields
+
+Fields are **schema-defined** and **intent-based**.
+
+```php
+'project_name' => [
+    'type'    => 'string',
+    'field'   => 'text',
+    'default' => '',
+];
+```
+
+Media fields store attachment IDs and enforce intent safely.
+
+See the full list in **FIELDS.md**.
 
 ---
 
-## Step 5: Multisite Considerations
+## Step 6: Multisite Considerations
 
-If your plugin runs on multisite:
-
-- Decide scope per settings tab:
-    - `site` → per-site configuration
-    - `network` → network-wide configuration
-- Declare scope in the schema
-- Network-scoped tabs automatically appear only in Network Admin
-
-Single-site installs are unaffected.
+- Declare scope per tab (`site` or `network`)
+- Network tabs appear only in Network Admin
+- Single-site installs are unaffected
 
 ---
 
-## Step 6: Import, Export, and Reset
+## Step 7: Import, Export, and Reset
 
-- Import/export lives in the Tools tab
-- Settings are exported per tab
-- Imports are schema-validated and sanitized
-- Reset returns a single tab to its defaults
-
-These actions are capability-protected and explicit by design.
+- Tools tab handles import/export
+- Imports are validated
+- Reset restores defaults per tab
 
 ---
 
-## Step 7: Evolving Settings Safely
+## Step 8: Evolving Settings Safely
 
-If you need to change settings over time:
+- Version schemas
+- Migrate lazily on read
+- Never mutate options directly
 
-- Version the schema
-- Implement a migration
-- Let migrations run lazily on read
-
-Never:
-- run migrations on activation
-- modify stored settings directly
-
-See `advanced-topics.md` for details.
+See **advanced-topics.md**.
 
 ---
 
-## Step 8: What Not to Do (Common Mistakes)
+## Step 9: What Not to Do
 
 - Don’t bypass the Loader
 - Don’t bypass the SettingsRepository
-- Don’t mix admin and public concerns
+- Don’t mix admin and public logic
 - Don’t add global helpers
-- Don’t weaken contracts just to make it work
-
-If you’re fighting the structure, you’re probably adding the wrong abstraction.
 
 ---
 
@@ -191,10 +177,4 @@ If you’re fighting the structure, you’re probably adding the wrong abstracti
 
 This boilerplate is intentionally strict.
 
-Use it when:
-- your plugin will live for years
-- settings matter
-- multisite and permissions matter
-- maintainability matters
-
-If you just need a quick plugin, this is not the right tool.
+Use it when long-term maintainability matters.

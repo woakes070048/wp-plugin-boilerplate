@@ -65,6 +65,22 @@ This repository is a **foundation**, not a demo plugin.
 
 ---
 
+## Documentation
+
+This boilerplate is intentionally opinionated and schema-driven.
+
+- **[HOW-TO-USE.md](HOW-TO-USE.md)**  
+  Practical guidance on creating a real plugin using this boilerplate.
+
+- **[FIELDS.md](FIELDS.md)**  
+  Complete reference of all supported field types, their syntax, and guarantees.
+
+Advanced internal topics such as multisite behavior, schema migrations, and import/export are documented separately to keep this README focused.
+
+See: **[Advanced Topics](ADVANCED-TOPICS.md)**
+
+---
+
 ## Settings Architecture
 
 - `TabContract` defines navigation and rendering
@@ -76,21 +92,6 @@ Rules:
 - Tabs never render `<form>` tags or action buttons
 - UI chrome (forms, buttons, notices) is owned by the renderer
 - Presentation-only tabs must never touch settings storage
-
----
-
-## Advanced Topics
-
-This boilerplate includes support for advanced capabilities such as:
-
-- multisite-aware settings
-- schema versioning and migrations
-- per-tab capability enforcement
-- per-tab import and export
-
-These features are intentionally documented separately to keep this README focused.
-
-See: **[Advanced Topics](ADVANCED-TOPICS.md)**
 
 ---
 
@@ -115,23 +116,19 @@ If you break these rules, this stops being a boilerplate.
 
 ---
 
-## How to Use
-
-See [How to Use](HOW-TO-USE.md) for a practical guide to building a real plugin with this boilerplate.
-
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+Please see [CHANGELOG](CHANGELOG.md) for more information on recent changes.
 
 ## Security
 
-If you discover any security related issues, please email vardhans@ulhas.net instead of using the issue tracker.
+If you discover any security-related issues, please email **vardhans@ulhas.net** instead of using the issue tracker.
 
 ## Author
 
-- [Ulhas Vardhan Golchha](https://github.com/golchha21) - *Initial work*
+- [Ulhas Vardhan Golchha](https://github.com/golchha21) — *Initial work*
 
-See also the list of [contributors](https://github.com/golchha21/wp-plugin-boilerplate/graphs/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/golchha21/wp-plugin-boilerplate/graphs/contributors).
 
 ---
 
@@ -141,5 +138,5 @@ See also the list of [contributors](https://github.com/golchha21/wp-plugin-boile
 
 ---
 
-If this boilerplate has been useful to you, you can support its development here: [Buy me a coffee](https://www.buymeacoffee.com/golchha21)
-
+If this boilerplate has been useful to you, you can support its development here:  
+[Buy me a coffee](https://www.buymeacoffee.com/golchha21)
