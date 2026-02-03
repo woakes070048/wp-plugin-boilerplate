@@ -1,0 +1,9 @@
+{
+  "name": "golchha/wp-plugin-boilerplate",
+  "type": "wordpress-plugin",
+  "autoload": {
+    "psr-4": {
+      "WPPluginBoilerplate\\\\": "src/"
+    }
+  }
+}
