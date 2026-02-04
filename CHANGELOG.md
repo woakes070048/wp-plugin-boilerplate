@@ -9,6 +9,18 @@ This project follows a **foundation-first** release model:
 
 ---
 
+## [v0.9.2] — 2026-02-04
+
+- Updated composer.json
+
+---
+
+## [v0.9.1] — 2026-02-03
+
+- Added CHANGELOD.md
+
+---
+
 ## [v0.9.0] — Foundation Release
 
 First public release of **WP Plugin Boilerplate**.

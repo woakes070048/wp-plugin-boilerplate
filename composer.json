@@ -1,6 +1,22 @@
 {
   "name": "golchha/wp-plugin-boilerplate",
+  "version": "0.9.2",
+  "description": "An opinionated, OOP-first WordPress plugin boilerplate for building long-lived, maintainable plugins.",
   "type": "wordpress-plugin",
+  "homepage": "https://github.com/golchha21/wp-plugin-boilerplate",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ulhas Vardhan Golchha",
+      "email": "vardhans@ulhas.net",
+      "homepage": "https://www.ulhas.net",
+      "role": "Web Architect"
+    }
+  ],
+  "support": {
+    "email": "vardhans@ulhas.net",
+    "issues": "https://github.com/golchha21/wp-plugin-boilerplate/issues"
+  },
   "autoload": {
     "psr-4": {
       "WPPluginBoilerplate\\": "src/"
