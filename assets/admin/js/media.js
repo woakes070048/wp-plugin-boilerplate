@@ -4,22 +4,22 @@
   $(document).on('click', '.wppb-media-select', function (e) {
     e.preventDefault();
 
-    const btn   = $(this);
-    const wrap  = btn.closest('.wppb-media-field');
+    const btn = $(this);
+    const wrap = btn.closest('.wppb-media-field');
     const input = wrap.find('input[type="hidden"]');
 
     const fieldType = btn.data('field'); // image | audio | video | document | archive | media | file
-    const mimes     = btn.data('mimes'); // array of allowed MIME types
+    const mimes = btn.data('mimes'); // array of allowed MIME types
 
     const frame = wp.media({
       title: 'Select file',
-      button: { text: 'Use this file' },
+      button: {text: 'Use this file'},
       multiple: false,
       library: (() => {
         // Only native, stable filters
-        if (fieldType === 'image') return { type: 'image' };
-        if (fieldType === 'audio') return { type: 'audio' };
-        if (fieldType === 'video') return { type: 'video' };
+        if (fieldType === 'image') return {type: 'image'};
+        if (fieldType === 'audio') return {type: 'audio'};
+        if (fieldType === 'video') return {type: 'video'};
         return {}; // document / archive / media / file
       })()
     });

@@ -13,7 +13,7 @@ The boilerplate supports WordPress multisite without assuming it.
 
 ### Core idea
 
-Each settings schema explicitly declares its storage scope:
+Each settings tab explicitly declares its storage scope:
 
 - `site` → per-site settings
 - `network` → network-wide settings
@@ -23,10 +23,10 @@ Scope is a **design-time decision**, not a conditional.
 
 ### How scope works
 
-- Site-scoped schemas use:
+- Site-scoped settings tabs use:
     - `get_option()`
     - `update_option()`
-- Network-scoped schemas use:
+- Network-scoped settings tabs use:
     - `get_site_option()`
     - `update_site_option()`
 
@@ -44,6 +44,7 @@ This prevents accidental cross-site configuration leaks.
 ### Default behavior
 
 On single-site installs:
+
 - all settings behave as `site` scope
 - no multisite-specific behavior is triggered
 
@@ -58,11 +59,13 @@ Settings are designed to evolve safely over time.
 ### Why migrations exist
 
 Migrations allow you to:
+
 - add new settings without breaking existing installs
 - change defaults safely
 - restructure configuration gradually
 
 There are:
+
 - no activation-time upgrade hooks
 - no one-off migration scripts
 
@@ -71,6 +74,7 @@ Migrations run lazily when settings are read.
 ### Failure philosophy
 
 If a migration fails:
+
 - the plugin must continue operating with the last valid data
 - partial migrations must not corrupt stored settings
 
@@ -92,9 +96,9 @@ class AdvancedSchema implements MigratableSchemaContract
         return 2;
     }
 
-    public static function migrate(array $old, int $fromVersion): array
+    public static function migrate(array $old, int $from_version): array
     {
-        if ($fromVersion < 2) {
+        if ($from_version < 2) {
             $old['api_timeout'] = $old['api_timeout'] ?? 30;
         }
 
@@ -117,16 +121,19 @@ class AdvancedSchema implements MigratableSchemaContract
 Each settings tab declares its own access policy.
 
 Tabs specify:
+
 - a capability required to view the tab
 - a capability required to modify settings
 
 This allows:
+
 - read-only tabs
 - admin-only tabs
 - network-admin-only tabs
 - future custom role support
 
 Capabilities are enforced:
+
 - when rendering the UI
 - when saving, resetting, importing, or exporting settings
 
@@ -153,6 +160,7 @@ There is no global import or export.
 Import and export actions live in a dedicated **Tools** tab.
 
 This keeps:
+
 - configuration tabs focused
 - destructive actions explicit
 - permissions centralized
@@ -173,6 +181,7 @@ Breaking these rules undermines the architecture.
 ## When to Use These Features
 
 Use advanced features when:
+
 - your plugin will live across multiple versions
 - your plugin runs on multisite
 - you need strict permission boundaries

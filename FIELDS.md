@@ -1,14 +1,14 @@
 # Fields Reference
 
-This document lists **all supported field types** in the WP Plugin Boilerplate, along with their **schema syntax**, **behavior**, and **guarantees**.
+This document lists **all supported field types** in the WP Plugin Boilerplate, along with their **settings definition syntax**, **behavior**, and **guarantees**.
 
-The field system is **schema-driven** and **intent-based**.
+The field system is **tab-owned** and **intent-based**.
 
 ---
 
 ## General Rules
 
-- Fields are defined inside a **Schema class**
+- Fields are defined inside a **settings tab class**
 - Each field is keyed by a unique string
 - Storage format is deterministic
 - Defaults are applied automatically
@@ -33,6 +33,7 @@ public static function fields(): array
 ## Core Text-Based Fields
 
 ### text
+
 ```php
 'project_name' => [
     'type'    => 'string',
@@ -42,6 +43,7 @@ public static function fields(): array
 ```
 
 ### textarea
+
 ```php
 'description' => [
     'type'    => 'string',
@@ -51,6 +53,7 @@ public static function fields(): array
 ```
 
 ### email
+
 ```php
 'contact_email' => [
     'type'    => 'string',
@@ -59,6 +62,7 @@ public static function fields(): array
 ```
 
 ### url
+
 ```php
 'website_url' => [
     'type'    => 'string',
@@ -67,6 +71,7 @@ public static function fields(): array
 ```
 
 ### password
+
 ```php
 'api_key' => [
     'type'    => 'string',
@@ -79,6 +84,7 @@ public static function fields(): array
 ## Boolean & Numeric Fields
 
 ### checkbox
+
 ```php
 'enabled' => [
     'type'    => 'boolean',
@@ -88,6 +94,7 @@ public static function fields(): array
 ```
 
 ### number
+
 ```php
 'items_per_page' => [
     'type'    => 'integer',
@@ -101,6 +108,7 @@ public static function fields(): array
 ## Choice Fields
 
 ### select
+
 ```php
 'layout' => [
     'type'    => 'string',
@@ -114,6 +122,7 @@ public static function fields(): array
 ```
 
 ### radio
+
 ```php
 'mode' => [
     'type'    => 'string',
@@ -133,6 +142,7 @@ public static function fields(): array
 All media fields store **attachment IDs**.
 
 ### image
+
 ```php
 'logo' => [
     'type'  => 'integer',
@@ -141,6 +151,7 @@ All media fields store **attachment IDs**.
 ```
 
 ### audio
+
 ```php
 'intro_audio' => [
     'type'  => 'integer',
@@ -149,6 +160,7 @@ All media fields store **attachment IDs**.
 ```
 
 ### video
+
 ```php
 'intro_video' => [
     'type'  => 'integer',
@@ -157,6 +169,7 @@ All media fields store **attachment IDs**.
 ```
 
 ### document
+
 ```php
 'terms_pdf' => [
     'type'     => 'integer',
@@ -170,6 +183,7 @@ All media fields store **attachment IDs**.
 ## Popup Filtering Note
 
 WordPress guarantees popup filtering only for:
+
 - image
 - audio
 - video

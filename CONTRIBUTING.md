@@ -24,11 +24,13 @@ If a change makes the system easier to misuse, it will be rejected.
 ## What This Repository Is (and Is Not)
 
 ### This repository **is**:
+
 - a foundation for building WordPress plugins
 - a reference architecture
 - a place to encode best practices as enforceable rules
 
 ### This repository **is not**:
+
 - a demo plugin
 - a collection of snippets
 - a playground for experimental patterns
@@ -39,25 +41,30 @@ If a change makes the system easier to misuse, it will be rejected.
 ## Ground Rules (Non-Negotiable)
 
 ### 1. Entry file discipline
+
 - `wp-plugin-boilerplate.php` must remain wiring-only
 - No logic, conditionals, or side effects are allowed there
 
 ### 2. Hook registration
+
 - `add_action` and `add_filter` may only appear inside `Loader`
 - Feature classes must register hooks via the loader
 
 ### 3. Settings discipline
-- All settings must be schema-driven
+
+- All settings must be tab-owned
 - Direct calls to `get_option()` or `get_site_option()` are forbidden
 - Each settings tab must own its option key
 - Presentation-only tabs must never persist data
 
 ### 4. Multisite awareness
+
 - Multisite behavior must be explicit
-- Storage scope (`site` vs `network`) must be declared in schemas
+- Storage scope (`site` vs `network`) must be declared in settings tabs
 - Network-scoped tabs must never appear in site admin
 
 ### 5. Migrations
+
 - Migrations must be idempotent
 - Migrations must not run on plugin activation
 - Migrations must not produce side effects
@@ -94,7 +101,7 @@ Features that increase surface area without strengthening the foundation are unl
 Documentation is considered **part of the API**.
 
 - [README](README.md) documents rules and mental models
-- [Advanced Topics](ADVANCED-TOPICS.md) documents deep mechanics
+- [ADVANCED-TOPICS.md](ADVANCED-TOPICS.md) documents deep mechanics
 - Changes to behavior must include documentation updates
 - Avoid duplicating content across documents
 
@@ -110,6 +117,7 @@ A good pull request:
 - does not mix refactors with new features
 
 If a PR introduces a new concept, it must also introduce:
+
 - clear naming
 - clear ownership
 - clear documentation

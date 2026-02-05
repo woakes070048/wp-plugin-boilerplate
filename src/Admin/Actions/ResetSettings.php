@@ -2,27 +2,47 @@
 
 namespace WPPluginBoilerplate\Admin\Actions;
 
-use WPPluginBoilerplate\Support\Settings\Contracts\SettingsTabContract;
-use WPPluginBoilerplate\Support\Settings\Tabs;
-use WPPluginBoilerplate\Support\Settings\SettingsRepository;
+use WPPluginBoilerplate\Plugin;
+use WPPluginBoilerplate\Settings\SettingsRepository;
+use WPPluginBoilerplate\Settings\Tabs;
+use WPPluginBoilerplate\Settings\Contracts\SettingsContract;
 
 class ResetSettings
 {
-    public function handle(): void
-    {
-        check_admin_referer('wp_plugin_boilerplate_reset');
+	public function handle(): void
+	{
+		// Resolve active tab from request context
+		$tab = Tabs::active();
 
-        $tab = Tabs::active();
+		// Tab must provide settings
+		if (! $tab instanceof SettingsContract) {
+			wp_die(__('This tab does not support settings.', Plugin::text_domain()));
+		}
 
-        if (! $tab instanceof SettingsTabContract) {
-            wp_die('This tab does not support settings.');
-        }
+		// Capability check MUST match tab capability
+		if (! current_user_can($tab->manageCapability())) {
+			wp_die(__('Sorry, you are not allowed to access this page.', Plugin::text_domain()));
+		}
 
-        SettingsRepository::reset($tab);
+		// Nonce check (must match the one used in the button)
+		check_admin_referer( Plugin::prefix() . 'reset');
 
-        wp_safe_redirect(
-            admin_url('admin.php?page=wp-plugin-boilerplate&tab=' . $tab->id())
-        );
-        exit;
-    }
+		// Build defaults from fields (single source of truth)
+		$defaults = [];
+
+		foreach ($tab::fields() as $key => $definition) {
+			$defaults[$key] = $definition['default'] ?? null;
+		}
+
+		// Persist defaults
+		SettingsRepository::update(
+			$tab::optionKey(),
+			$defaults
+		);
+
+		// Redirect back to the tab
+		wp_safe_redirect(admin_url('admin.php?page='. Plugin::slug() .'&tab=' . $tab->id()));
+
+		exit;
+	}
 }

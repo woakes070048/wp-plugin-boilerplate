@@ -2,45 +2,60 @@
 
 namespace WPPluginBoilerplate\Admin\Actions;
 
-use WPPluginBoilerplate\Support\Settings\Contracts\SettingsTabContract;
-use WPPluginBoilerplate\Support\Settings\SettingsRepository;
-use WPPluginBoilerplate\Support\Settings\Tabs;
+use WPPluginBoilerplate\Plugin;
+use WPPluginBoilerplate\Settings\Contracts\SettingsContract;
+use WPPluginBoilerplate\Settings\SettingsRepository;
+use WPPluginBoilerplate\Settings\Support\ScopeResolver;
+use WPPluginBoilerplate\Settings\Tabs;
 
 class ExportSettings
 {
-    public function handle(): void
-    {
-        $tabId = $_GET['tab'] ?? null;
-        $tab   = Tabs::active();
+	public function handle(): void
+	{
+		if (! current_user_can('manage_options')) {
+			wp_die(__('Sorry, you are not allowed to access this page.'));
+		}
 
-        if ($tab->id() !== $tabId) {
-            wp_die('Invalid tab context');
-        }
+		check_admin_referer('wppb_export_all');
 
-        check_admin_referer('wp_plugin_boilerplate_export_' . $tab->id());
+		$export = [
+			'exported_at' => gmdate('c'),
+			'plugin'      => Plugin::slug(),
+			'version'     => Plugin::version(),
+			'tabs'        => [],
+		];
 
-        if (! $tab instanceof SettingsTabContract) {
-            wp_die('Tab does not support export');
-        }
+		foreach (Tabs::all() as $tab) {
 
-        if (! current_user_can($tab->manageCapability())) {
-            wp_die('Unauthorized');
-        }
+			if (! $tab instanceof SettingsContract) {
+				continue;
+			}
 
-        $data = SettingsRepository::get($tab);
+			if (! current_user_can($tab->manageCapability())) {
+				continue;
+			}
 
-        header('Content-Type: application/json');
-        header(
-            'Content-Disposition: attachment; filename="' . $tab->id() . '-settings.json"'
-        );
+			$scope = ScopeResolver::resolve($tab);
 
-        echo wp_json_encode([
-            'tab'     => $tab->id(),
-            'exported_at' => gmdate('c'),
-            'data'    => $data,
-        ]);
+			$export['tabs'][$tab->id()] = [
+				'label'      => $tab->label(),
+				'option_key' => $tab::optionKey(),
+				'scope'      => $scope,
+				'data'       => SettingsRepository::get(
+					$tab::optionKey(),
+					$scope
+				),
+			];
+		}
 
-        exit;
-    }
+		header('Content-Type: application/json');
+		header(
+			'Content-Disposition: attachment; filename="' .
+			Plugin::slug() . '-settings-' . gmdate('Ymd-His') . '.json"'
+		);
+
+		echo wp_json_encode($export, JSON_PRETTY_PRINT);
+
+		exit;
+	}
 }
-

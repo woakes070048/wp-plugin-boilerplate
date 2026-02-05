@@ -3,49 +3,67 @@
 namespace WPPluginBoilerplate;
 
 use WPPluginBoilerplate\Admin\Admin;
+use WPPluginBoilerplate\I18n\I18n;
 use WPPluginBoilerplate\Public\PublicPlugin;
-use WPPluginBoilerplate\Support\Assets;
-use WPPluginBoilerplate\Support\I18n;
 
 class Plugin
 {
-    protected Loader $loader;
+	protected Loader $loader;
 
-    public function __construct()
-    {
-        $this->loader = new Loader();
+	public function __construct()
+	{
+		$this->loader = new Loader();
+		$this->register_services();
+	}
 
-        $this->register_i18n();
-        $this->register_assets();
-        $this->register_admin();
-        $this->register_public();
-    }
+	protected function register_services(): void
+	{
+		new I18n()->register($this->loader);
 
-    protected function register_i18n(): void
-    {
-        new I18n()->register($this->loader);
-    }
+		if (is_admin()) {
+			new Admin()->register($this->loader);
+		}
 
-    protected function register_admin(): void
-    {
-        if (is_admin()) {
-            new Admin()->register($this->loader);
-        }
-    }
+		new PublicPlugin()->register($this->loader);
+	}
 
-    protected function register_public(): void
-    {
-        new PublicPlugin()->register($this->loader);
-    }
+	public static function prefix(): string
+	{
+		return WPPB_PREFIX;
+	}
 
-    public function run(): void
-    {
-        $this->loader->run();
-    }
+	public static function text_domain(): string
+	{
+		return WPPB_TEXT_DOMAIN;
+	}
 
-    protected function register_assets(): void
-    {
-        new Assets()->register($this->loader);
-    }
+	public static function slug(): string
+	{
+		return WPPB_SLUG;
+	}
 
+	public static function version(): string
+	{
+		return WPPB_VERSION;
+	}
+
+	public static function url(): string
+	{
+		return WPPB_URL;
+	}
+
+	public static function option_key(): string
+	{
+		return  self::prefix() . 'settings';
+	}
+
+	public static function cron_hook(string $name): string
+	{
+		return self::prefix() . $name;
+	}
+
+	public function run(): void
+	{
+		$this->loader->run();
+	}
 }

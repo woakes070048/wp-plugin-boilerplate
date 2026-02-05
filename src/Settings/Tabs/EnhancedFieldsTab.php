@@ -1,0 +1,106 @@
+<?php
+
+namespace WPPluginBoilerplate\Settings\Tabs;
+
+use WPPluginBoilerplate\Plugin;
+use WPPluginBoilerplate\Settings\Contracts\SettingsContract;
+use WPPluginBoilerplate\Settings\Contracts\TabContract;
+use WPPluginBoilerplate\Settings\Schemas\EnhancedFieldsSchema;
+
+class EnhancedFieldsTab implements TabContract, SettingsContract
+{
+	public function id(): string
+	{
+		return 'enhanced-fields';
+	}
+
+	public function label(): string
+	{
+		return 'EnhancedFields';
+	}
+
+	public function hasForm(): bool
+	{
+		return true;
+	}
+
+	public function hasActions(): bool
+	{
+		return true; // if you want Reset
+	}
+
+	public function viewCapability(): string
+	{
+		return 'manage_options';
+	}
+
+	public function manageCapability(): string
+	{
+		return 'manage_options';
+	}
+
+	public static function optionKey(): string
+	{
+		return Plugin::option_key() . 'ef';
+	}
+
+	public static function fields(): array
+	{
+		return array(
+			'media' => array(
+				'type' => 'integer',
+				'field' => 'media',
+			),
+
+			'file' => array(
+				'type' => 'integer',
+				'field' => 'file',
+			),
+
+			'image' => array(
+				'type' => 'integer',
+				'field' => 'image',
+			),
+
+			'document' => array(
+				'type' => 'integer',
+				'field' => 'document',
+			),
+
+			'audio' => array(
+				'type' => 'integer',
+				'field' => 'audio',
+			),
+
+			'video' => array(
+				'type' => 'integer',
+				'field' => 'video',
+			),
+
+			'archive' => array(
+				'type' => 'integer',
+				'field' => 'archive',
+			),
+
+			'color' => array(
+				'type' => 'string',
+				'field' => 'color',
+				// hex color value.
+			),
+
+			'editor' => array(
+				'type' => 'string',
+				'field' => 'editor',
+				'rows' => 8,
+				'media_buttons' => false,
+			),
+		);
+	}
+
+	public function render(): void
+	{
+		settings_fields(static::optionKey());
+		do_settings_sections(static::optionKey());
+	}
+
+}

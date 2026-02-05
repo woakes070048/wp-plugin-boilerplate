@@ -3,6 +3,7 @@
 This document explains how to use the **WP Plugin Boilerplate** to build a real, maintainable WordPress plugin.
 
 It assumes you are familiar with:
+
 - WordPress plugin development
 - PHP namespaces and Composer
 - Basic WordPress admin concepts
@@ -60,11 +61,13 @@ composer dump-autoload
 The entry file exists only to **wire the plugin together**.
 
 It should:
+
 - load Composer autoload
 - register activation / deactivation hooks
 - instantiate the main `Plugin` class
 
 It must **not** contain:
+
 - business logic
 - conditionals
 - direct WordPress hooks
@@ -105,10 +108,11 @@ Never call `add_action()` directly.
 
 ## Step 4: Working With Settings
 
-Settings are built around **tabs + schemas**.
+Settings are built around **tabs + settings tabs**.
 
 Each settings tab:
-- owns its schema
+
+- owns its settings tab
 - owns its option key
 - persists independently
 
@@ -122,7 +126,7 @@ $settings = SettingsRepository::get(GeneralTab::class);
 
 ## Step 5: Defining Fields
 
-Fields are **schema-defined** and **intent-based**.
+Fields are **settings tab-defined** and **intent-based**.
 
 ```php
 'project_name' => [
@@ -156,11 +160,11 @@ See the full list in **FIELDS.md**.
 
 ## Step 8: Evolving Settings Safely
 
-- Version schemas
+- Version settings tabs
 - Migrate lazily on read
 - Never mutate options directly
 
-See **advanced-topics.md**.
+See **[ADVANCED-TOPICS.md](ADVANCED-TOPICS.md)**.
 
 ---
 
@@ -178,3 +182,35 @@ See **advanced-topics.md**.
 This boilerplate is intentionally strict.
 
 Use it when long-term maintainability matters.
+
+---
+
+## Working With Settings
+
+Settings are **owned by tabs**.
+
+A tab that persists settings:
+
+- implements `SettingsContract`
+- defines its own `optionKey()`
+- defines its fields via `fields()`
+
+Tabs that do not implement `SettingsContract` are presentation-only.
+
+### Multisite Scope
+
+By default, settings are stored at the **site** level.
+
+To store settings network-wide, implement `ScopedContract` on the tab:
+
+```php
+class NetworkSettingsTab implements ScopedContract
+{
+    public static function scope(): string
+    {
+        return 'network';
+    }
+}
+```
+
+If `ScopedContract` is not implemented, scope defaults to `site`.

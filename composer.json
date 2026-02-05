@@ -1,6 +1,6 @@
 {
   "name": "golchha/wp-plugin-boilerplate",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "An opinionated, OOP-first WordPress plugin boilerplate for building long-lived, maintainable plugins.",
   "type": "wordpress-plugin",
   "homepage": "https://github.com/golchha21/wp-plugin-boilerplate",
@@ -13,6 +13,9 @@
       "role": "Web Architect"
     }
   ],
+  "require": {
+    "php": "^8.3"
+  },
   "support": {
     "email": "vardhans@ulhas.net",
     "issues": "https://github.com/golchha21/wp-plugin-boilerplate/issues"
