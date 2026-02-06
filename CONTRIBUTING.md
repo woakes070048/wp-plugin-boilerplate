@@ -70,6 +70,11 @@ If a change makes the system easier to misuse, it will be rejected.
 - Migrations must not produce side effects
 - Data loss must be explicit and intentional
 
+### 6. Entry file discipline
+
+- `uninstall.php` must remain procedural and self-contained
+- Plugin classes and autoloaders must never be referenced during uninstall
+
 ---
 
 ## Code Style & Structure

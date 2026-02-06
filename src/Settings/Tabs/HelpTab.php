@@ -43,15 +43,13 @@ class HelpTab implements TabContract
 
 		echo '<p>';
 		echo esc_html__(
-			'This boilerplate is designed to be predictable and explicit. Most questions are answered by understanding the architecture rather than memorizing APIs.',
-			'wp-plugin-boilerplate'
+			'This boilerplate is designed to be predictable and explicit. Most questions are answered by understanding the architecture rather than memorizing APIs.', Plugin::text_domain()
 		);
 		echo '</p>';
 
 		echo '<p>';
 		echo esc_html__(
-			'If you are new to the structure, start with the high-level documentation before diving into individual classes.',
-			'wp-plugin-boilerplate'
+			'If you are new to the structure, start with the high-level documentation before diving into individual classes.', Plugin::text_domain()
 		);
 		echo '</p>';
 
@@ -105,8 +103,7 @@ class HelpTab implements TabContract
 		echo '<h3>Contributing and Feedback</h3>';
 		echo '<p>';
 		echo esc_html__(
-			'Contributions are welcome if they strengthen the architecture without diluting its constraints.',
-			'wp-plugin-boilerplate'
+			'Contributions are welcome if they strengthen the architecture without diluting its constraints.', Plugin::text_domain()
 		);
 		echo '</p>';
 
@@ -118,8 +115,7 @@ class HelpTab implements TabContract
 
 		echo '<p style="font-style: italic; color: #555;">';
 		echo esc_html__(
-			'When in doubt, choose the more explicit and restrictive solution. Clarity scales better than flexibility.',
-			'wp-plugin-boilerplate'
+			'When in doubt, choose the more explicit and restrictive solution. Clarity scales better than flexibility.', Plugin::text_domain()
 		);
 		echo '</p>';
 
@@ -127,8 +123,7 @@ class HelpTab implements TabContract
 
 		echo '<p style="margin-top: 12px;">';
 		echo esc_html__(
-			'If this boilerplate has been useful in your work, you can support its continued development here:',
-			'wp-plugin-boilerplate'
+			'If this boilerplate has been useful in your work, you can support its continued development here:', Plugin::text_domain()
 		);
 		echo '</p>';
 

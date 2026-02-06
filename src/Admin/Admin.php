@@ -52,7 +52,7 @@ class Admin
 
 		foreach ($tabs as $tab) {
 			$active_class = $tab->id() === $active->id() ? 'nav-tab-active' : '';
-			$url = admin_url('admin.php?page=wp-plugin-boilerplate&tab=' . $tab->id());
+			$url = admin_url('admin.php?page='. Plugin::slug() .'&tab=' . $tab->id());
 			echo "<a class='nav-tab {$active_class}' href='{$url}'>{$tab->label()}</a>";
 		}
 

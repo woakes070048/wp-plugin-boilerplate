@@ -12,11 +12,24 @@ class ExportSettings
 {
 	public function handle(): void
 	{
-		if (! current_user_can('manage_options')) {
-			wp_die(__('Sorry, you are not allowed to access this page.'));
+		$tab = Tabs::active();
+
+		// Tab must support settings
+		if (! $tab instanceof SettingsContract) {
+			wp_die(
+				__('This tab does not support settings.', Plugin::text_domain())
+			);
 		}
 
-		check_admin_referer('wppb_export_all');
+		// Capability must match tab
+		if (! current_user_can($tab->manageCapability())) {
+			wp_die(
+				__('Sorry, you are not allowed to access this page.', Plugin::text_domain())
+			);
+		}
+
+		// Nonce must be tab-scoped
+		check_admin_referer(Plugin::prefix() . 'export_all');
 
 		$export = [
 			'exported_at' => gmdate('c'),

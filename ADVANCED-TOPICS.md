@@ -142,18 +142,21 @@ Server-side enforcement is mandatory.
 
 ---
 
-## Import and Export
+## Import and Export Scope
 
-Settings can be exported and imported **per tab**.
+Import and Export are **global operations**.
 
-### Design principles
+They operate across all settings tabs and therefore:
 
-- Import/export is opt-in per tab
-- Data is validated against the schema
-- Unknown fields are ignored
-- Each tab is isolated from others
+- are protected by a plugin-level capability
+- do not resolve or enforce tab-specific capabilities
+- use global, action-specific nonces
 
-There is no global import or export.
+This is intentional.
+
+Reset remains a **tab-scoped operation** and enforces the active tab’s capability and nonce.
+
+Capability scope must match data scope.
 
 ### Tools Tab
 

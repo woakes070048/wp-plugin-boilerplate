@@ -43,15 +43,13 @@ class AboutTab implements TabContract
 
 		echo '<p>';
 		echo esc_html__(
-			'WP Plugin Boilerplate is an opinionated, OOP-first foundation for building long-lived, maintainable WordPress plugins.',
-			'wp-plugin-boilerplate'
+			'WP Plugin Boilerplate is an opinionated, OOP-first foundation for building long-lived, maintainable WordPress plugins.', Plugin::text_domain()
 		);
 		echo '</p>';
 
 		echo '<p>';
 		echo esc_html__(
-			'It is not a demo plugin or a collection of snippets. It encodes architectural rules and constraints that are meant to scale across versions, teams, and installations.',
-			'wp-plugin-boilerplate'
+			'It is not a demo plugin or a collection of snippets. It encodes architectural rules and constraints that are meant to scale across versions, teams, and installations.', Plugin::text_domain()
 		);
 		echo '</p>';
 
@@ -82,15 +80,13 @@ class AboutTab implements TabContract
 		echo '<h3>Who This Is For</h3>';
 		echo '<p>';
 		echo esc_html__(
-			'Use this boilerplate when long-term maintainability, clarity, and predictable behavior matter. If you are building a quick one-off plugin, this may be more structure than you need.',
-			'wp-plugin-boilerplate'
+			'Use this boilerplate when long-term maintainability, clarity, and predictable behavior matter. If you are building a quick one-off plugin, this may be more structure than you need.', Plugin::text_domain()
 		);
 		echo '</p>';
 
 		echo '<p style="font-style: italic; color: #555;">';
 		echo esc_html__(
-			'The architecture is intentionally strict. The constraints are part of the value.',
-			'wp-plugin-boilerplate'
+			'The architecture is intentionally strict. The constraints are part of the value.', Plugin::text_domain()
 		);
 		echo '</p>';
 
@@ -98,8 +94,7 @@ class AboutTab implements TabContract
 
 		echo '<p style="margin-top: 12px;">';
 		echo esc_html__(
-			'If this boilerplate has been useful in your work, you can support its continued development here:',
-			'wp-plugin-boilerplate'
+			'If this boilerplate has been useful in your work, you can support its continued development here:', Plugin::text_domain()
 		);
 		echo '</p>';
 

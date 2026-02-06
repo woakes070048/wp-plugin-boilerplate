@@ -125,6 +125,7 @@ Rules:
 - Plugin = orchestration
 - Loader = wiring
 - Classes = behavior
+- - Uninstall runs outside the plugin context and must not depend on plugin classes
 
 If you break these rules, this stops being a boilerplate.
 

@@ -10,6 +10,22 @@ This project follows a **foundation-first** release model:
 
 ---
 
+## [v0.9.6] — 2026-02-06
+
+### Fixed
+- Prevented fatal errors during plugin uninstall by removing class dependencies from `uninstall.php`
+- Clarified and enforced global scope for Import and Export operations
+
+### Changed
+- Documented the distinction between global (Import/Export) and tab-scoped (Reset) settings actions
+- Hardened lifecycle edge cases to align with WordPress execution model
+
+### Philosophy
+- Capability scope must match data scope
+- Uninstall runs outside the plugin context and must remain procedural
+
+---
+
 ## [v0.9.5] — 2026-02-06
 
 ### Changed
