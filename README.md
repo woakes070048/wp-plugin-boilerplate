@@ -5,129 +5,89 @@
 ![Downloads](https://img.shields.io/github/downloads/golchha21/wp-plugin-boilerplate/total)
 ![License](https://img.shields.io/github/license/golchha21/wp-plugin-boilerplate)
 
+An opinionated, OOP-first WordPress plugin boilerplate focused on **long-term stability**, **explicit architecture**, and **predictable behavior**.
 
-An opinionated, OOP-first WordPress plugin boilerplate for building long-lived, maintainable plugins.
-
-This repository is a **foundation**, not a demo plugin.
+This boilerplate is designed for plugins that are expected to live for years, evolve safely, and be maintained by more than one developer.
 
 ---
 
 ## Core Principles
 
-### 1. One entry point
-
-- `wp-plugin-boilerplate.php` is the only file WordPress directly interacts with
-- No logic lives there beyond wiring
-
-### 2. Centralized hooks only
-
-- `add_action` and `add_filter` are allowed **only** inside `Loader`
-- All hooks must be registered via `$loader->action()` or `$loader->filter()`
-
-### 3. No WordPress globals in business logic
-
-- No `$_POST`, `$_GET`, or `$_REQUEST` outside controlled entry points
-- No scattered `global $wpdb`
-
-### 4. Extend by adding classes, not editing core
-
-- New behavior = new class
-- Core orchestration classes should rarely change
-
-### 5. PSR-4 is non-negotiable
-
-- File name = class name
-- Namespace = folder structure
-- Case-sensitive, always
-
-### 6. Tabs are first-class concepts
-
-- Admin screens are composed of tabs
-- Tabs may be:
-    - **settings tabs** (persist data)
-    - **presentation-only tabs** (About, Help, Docs)
-- Not all tabs save data, by design
-
-### 7. Settings are schema-driven and isolated
-
-- Each settings tab owns its own schema
-- Each settings tab persists data under its own option key
-- Defaults are defined centrally in schemas
-- Raw `get_option()` usage outside the settings layer is forbidden
-
-### 8. Multisite is explicit, never implicit
-
-- Multisite is supported, but never assumed
-- Each settings schema explicitly declares its storage scope:
-    - `site` → per-site options
-    - `network` → network-wide options
-- Network-scoped settings are visible and editable only in Network Admin
-- There is no automatic switching between `option` and `site_option`
+- Single entry point for orchestration
+- Centralized hook registration via a Loader
+- Clear separation between Admin, Settings, and Public runtime
+- Explicit capability and scope rules
+- Deterministic lifecycle behavior
 
 ---
 
 ## Folder Responsibilities
 
-| Folder        | Responsibility                    |
-|---------------|-----------------------------------|
-| `src/`        | All PHP source code               |
-| `src/Admin`   | Admin-only behavior               |
-| `src/Public`  | Frontend behavior                 |
-| `src/Support` | Shared helpers and infrastructure |
-| `assets/`     | JS / CSS                          |
-| `languages/`  | Translations                      |
-
----
-
-## Documentation
-
-This boilerplate is intentionally opinionated and schema-driven.
-
-- **[HOW-TO-USE.md](HOW-TO-USE.md)**  
-  Practical guidance on creating a real plugin using this boilerplate.
-
-- **[FIELDS.md](FIELDS.md)**  
-  Complete reference of all supported field types, their syntax, and guarantees.
-
-- **[ADVANCED-TOPICS.md](ADVANCED-TOPICS.md)**
-  Advanced internal topics such as multisite behavior, schema migrations, and import/export are documented separately to keep this README focused.
+| Directory        | Responsibility |
+|------------------|----------------|
+| `src/Admin`      | Admin UI, menus, admin actions |
+| `src/Settings`   | Settings tabs, defaults, scope, persistence |
+| `src/Public`     | Frontend and runtime behavior |
+| `src/Support`    | Shared infrastructure |
+| `src/Lifecycle`  | Activation and deactivation |
+| `assets`         | CSS, JS, static assets |
 
 ---
 
 ## Settings Architecture
 
-- `TabContract` defines navigation and rendering
-- `SchemaContract` defines persistence, defaults, and sanitization
-- `SettingsTabContract` explicitly marks tabs that own settings
+Settings are owned directly by individual tabs.
 
-Rules:
+Each settings tab is responsible for:
+- its option key
+- default values
+- sanitization
+- storage scope (site or network)
+- capability enforcement
 
-- Tabs render **content only**
-- Tabs never render `<form>` tags or action buttons
-- UI chrome (forms, buttons, notices) is owned by the renderer
-- Presentation-only tabs must never touch settings storage
+There is no separate schema layer.
 
----
-
-## What NOT to do
-
-- ❌ Put logic in the entry file
-- ❌ Call `add_action` or `add_filter` directly in feature classes
-- ❌ Access `get_option()` / `get_site_option()` outside the settings repository
-- ❌ Run migrations on plugin activation
-- ❌ Introduce silent side effects in constructors
+Settings must be accessed exclusively through the `SettingsRepository`.
+Direct calls to `get_option()` or `get_site_option()` are considered architectural violations.
 
 ---
 
 ## Mental Model
 
-- Entry file = handshake
-- Plugin = orchestration
-- Loader = wiring
-- Classes = behavior
-- - Uninstall runs outside the plugin context and must not depend on plugin classes
+- Classes define behavior
+- Tabs define configuration boundaries
+- Admin configures behavior
+- Public executes behavior
+- Settings connect admin and runtime
+- Uninstall runs outside the plugin context and must remain procedural
 
-If you break these rules, this stops being a boilerplate.
+---
+
+## Who This Is For
+
+This boilerplate is a good fit if:
+
+- your plugin has frontend behavior
+- your plugin must survive renames and refactors
+- settings are business-critical
+- multisite support matters
+- long-term maintainability matters
+
+If you are building a quick, disposable plugin, this may be more structure than you need.
+
+---
+
+## v1.0 Stability Guarantees
+
+Starting with v1.0.0, this boilerplate guarantees:
+
+- Public behavior is always registered unconditionally
+- Admin configuration flows cleanly into runtime behavior
+- Plugin lifecycle behavior is predictable and safe
+- Uninstall cleans up all plugin-owned data
+- Renaming the plugin does not break behavior
+
+Breaking these guarantees requires a major version bump.
 
 ---
 

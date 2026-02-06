@@ -1,216 +1,82 @@
-# How to Use This Boilerplate
+# How to Use
 
-This document explains how to use the **WP Plugin Boilerplate** to build a real, maintainable WordPress plugin.
-
-It assumes you are familiar with:
-
-- WordPress plugin development
-- PHP namespaces and Composer
-- Basic WordPress admin concepts
-
-This is **not** a WordPress tutorial.
+This guide walks through building a real plugin using the boilerplate.
+It assumes familiarity with WordPress and PHP.
 
 ---
 
-## Step 1: Create a New Plugin From the Boilerplate
+## Step 1: Rename the Boilerplate
 
-Clone or copy this repository and rename it for your plugin.
+Start by making the boilerplate yours.
 
-At minimum, update:
-
-- Repository name
-- Plugin folder name
-- Entry file name
-- Plugin header metadata
-- PHP namespace
-
-### Example
-
-```
-wp-plugin-boilerplate
-↓
-my-awesome-plugin
-```
-
-Rename:
-
-```
-wp-plugin-boilerplate.php
-↓
-my-awesome-plugin.php
-```
-
-Update namespaces everywhere:
-
-```
-WPPluginBoilerplate
-↓
-MyAwesomePlugin
-```
-
-Then regenerate autoloading:
+- Rename the plugin directory
+- Rename the main plugin file
+- Update the namespace, prefix, and text domain by replacing all boilerplate identifiers  (`wp-plugin-boilerplate`, `WPPluginBoilerplate`, `WP Plugin Boilerplate`, `WPPB_`, `wppb_`, `WPPB-`, `wppb-`)
+- Regenerate the autoloader:
 
 ```bash
 composer dump-autoload
-```
+
 
 ---
 
-## Step 2: Understand the Entry File
+## Step 2: Define Settings Tabs
 
-The entry file exists only to **wire the plugin together**.
+Settings are defined directly by tabs.
 
-It should:
+A settings tab owns:
+- its option key
+- default values
+- sanitization rules
+- storage scope
+- capability enforcement
 
-- load Composer autoload
-- register activation / deactivation hooks
-- instantiate the main `Plugin` class
-
-It must **not** contain:
-
-- business logic
-- conditionals
-- direct WordPress hooks
-
-Think of it as a handshake, not a brain.
+There is no schema abstraction.
 
 ---
 
-## Step 3: Add a Feature (The Right Way)
+## Step 3: Add Runtime Behavior
 
-To add new behavior:
+Runtime behavior lives in `PublicPlugin` (or equivalent).
 
-1. Create a new class
-2. Decide where it belongs:
-    - `Admin` → admin-only behavior
-    - `Public` → frontend behavior
-    - `Support` → shared infrastructure
-3. Register hooks via the Loader
+Public behavior must always be registered unconditionally by the Plugin orchestrator.
 
-```php
-class ExampleFeature
-{
-    public function register(Loader $loader): void
-    {
-        $loader->action('init', $this, 'boot');
-    }
-
-    public function boot(): void
-    {
-        // feature logic
-    }
-}
-```
-
-Never call `add_action()` directly.
+Do **not** gate runtime wiring behind `is_admin()` or other context checks.
+Context must be resolved inside hook callbacks.
 
 ---
 
-## Step 4: Working With Settings
+## Step 4: Admin Configuration
 
-Settings are built around **tabs + settings tabs**.
+Admin is responsible only for:
+- rendering settings UI
+- validating input
+- triggering admin-only actions
 
-Each settings tab:
-
-- owns its settings tab
-- owns its option key
-- persists independently
-
-Read settings via:
-
-```php
-$settings = SettingsRepository::get(GeneralTab::class);
-```
+Admin must never contain runtime logic.
 
 ---
 
-## Step 5: Defining Fields
+## Step 5: Import, Export, and Reset
 
-Fields are **settings tab-defined** and **intent-based**.
+Not all actions have the same scope.
 
-```php
-'project_name' => [
-    'type'    => 'string',
-    'field'   => 'text',
-    'default' => '',
-];
-```
+- Import and Export are **global operations** affecting all tabs
+- Reset is a **tab-scoped operation** affecting only the active tab
 
-Media fields store attachment IDs and enforce intent safely.
-
-See the full list in **FIELDS.md**.
+Capability enforcement must match the scope of the action.
 
 ---
 
-## Step 6: Multisite Considerations
+## Step 6: Lifecycle
 
-- Declare scope per tab (`site` or `network`)
-- Network tabs appear only in Network Admin
-- Single-site installs are unaffected
-
----
-
-## Step 7: Import, Export, and Reset
-
-- Tools tab handles import/export
-- Imports are validated
-- Reset restores defaults per tab
+- Activation must be side-effect free
+- Deactivation pauses behavior but keeps data
+- Uninstall deletes all plugin-owned data and runs without plugin context
 
 ---
 
-## Step 8: Evolving Settings Safely
+## Final Rule
 
-- Version settings tabs
-- Migrate lazily on read
-- Never mutate options directly
-
-See **[ADVANCED-TOPICS.md](ADVANCED-TOPICS.md)**.
-
----
-
-## Step 9: What Not to Do
-
-- Don’t bypass the Loader
-- Don’t bypass the SettingsRepository
-- Don’t mix admin and public logic
-- Don’t add global helpers
-
----
-
-## Final Advice
-
-This boilerplate is intentionally strict.
-
-Use it when long-term maintainability matters.
-
----
-
-## Working With Settings
-
-Settings are **owned by tabs**.
-
-A tab that persists settings:
-
-- implements `SettingsContract`
-- defines its own `optionKey()`
-- defines its fields via `fields()`
-
-Tabs that do not implement `SettingsContract` are presentation-only.
-
-### Multisite Scope
-
-By default, settings are stored at the **site** level.
-
-To store settings network-wide, implement `ScopedContract` on the tab:
-
-```php
-class NetworkSettingsTab implements ScopedContract
-{
-    public static function scope(): string
-    {
-        return 'network';
-    }
-}
-```
-
-If `ScopedContract` is not implemented, scope defaults to `site`.
+If something feels convenient but implicit, it probably does not belong.
+Choose explicit behavior over shortcuts.

@@ -69,7 +69,7 @@ class Plugin
 
 	public static function option_key(): string
 	{
-		return  self::prefix() . 'settings';
+		return  self::prefix();
 	}
 
 	public static function cron_hook(string $name): string

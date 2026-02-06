@@ -1,191 +1,215 @@
 # Fields Reference
 
-This document lists **all supported field types** in the WP Plugin Boilerplate, along with their **settings definition syntax**, **behavior**, and **guarantees**.
+This document defines the **complete field definition structure** supported by the
+WP Plugin Boilerplate as of **v1.0**.
 
-The field system is **tab-owned** and **intent-based**.
+Fields are **tab-owned**, **explicit**, and **deterministic**.
+There is no schema layer and no implicit behavior.
 
 ---
 
 ## General Rules
 
-- Fields are defined inside a **settings tab class**
+- Fields are defined inside a **settings tab**
 - Each field is keyed by a unique string
-- Storage format is deterministic
-- Defaults are applied automatically
+- Defaults are mandatory
+- Storage format is predictable
 - Validation is enforced on **save and import**
+- Frontend reads must tolerate missing or empty values
+
+---
+
+## Canonical Field Definition
+
+This example shows **all supported options**.
+Most fields only need a subset.
 
 ```php
 public static function fields(): array
 {
-    return [
-        'example_field' => [
-            'type'    => 'string',
-            'field'   => 'text',
-            'default' => '',
-            'label'   => 'Example Field',
-        ],
-    ];
+	return [
+		'example_field' => [
+
+			// Data type (sanitization & normalization)
+			'type' => 'string', // string | int | bool | array
+
+			// UI renderer
+			'field' => 'text',
+			// text | textarea | checkbox | select | radio
+			// number | email | url | password | color
+			// image | audio | video | document
+
+			// Human-readable label
+			'label' => 'Example Field',
+
+			// Optional helper text
+			'description' => 'Displayed below the field.',
+
+			// Default value (required)
+			'default' => '',
+
+			// Placeholder (text-like fields only)
+			'placeholder' => 'Enter a value',
+
+			// Required flag (UI-level only)
+			'required' => false,
+
+			// Select / radio options
+			'options' => [
+				'option_1' => 'Option One',
+				'option_2' => 'Option Two',
+			],
+
+			// Conditional visibility (admin UI only)
+			'conditions' => [
+				[
+					'field' => 'another_field',
+					'operator' => '==', // == | != | in | not_in
+					'value' => 'yes',
+				],
+			],
+
+			// Optional capability override
+			// Falls back to tab capability
+			'capability' => 'manage_options',
+
+			// Custom CSS class
+			'class' => 'widefat',
+
+			// Field state flags
+			'readonly' => false,
+			'disabled' => false,
+
+			// Optional sanitization callback
+			// Receives raw value, must return sanitized value
+			'sanitize_callback' => function ($value) {
+				return sanitize_text_field($value);
+			},
+		],
+	];
 }
 ```
 
 ---
 
-## Core Text-Based Fields
+## Supported Field Types
 
-### text
+### Text-Based Fields
 
+#### text
 ```php
-'project_name' => [
-    'type'    => 'string',
-    'field'   => 'text',
-    'default' => '',
-];
+'type'  => 'string',
+'field' => 'text',
 ```
 
-### textarea
-
+#### textarea
 ```php
-'description' => [
-    'type'    => 'string',
-    'field'   => 'textarea',
-    'default' => '',
-];
+'type'  => 'string',
+'field' => 'textarea',
 ```
 
-### email
-
+#### email
 ```php
-'contact_email' => [
-    'type'    => 'string',
-    'field'   => 'email',
-];
+'type'  => 'string',
+'field' => 'email',
 ```
 
-### url
-
+#### url
 ```php
-'website_url' => [
-    'type'    => 'string',
-    'field'   => 'url',
-];
+'type'  => 'string',
+'field' => 'url',
 ```
 
-### password
-
+#### password
 ```php
-'api_key' => [
-    'type'    => 'string',
-    'field'   => 'password',
-];
+'type'  => 'string',
+'field' => 'password',
 ```
 
 ---
 
-## Boolean & Numeric Fields
+### Boolean & Numeric Fields
 
-### checkbox
-
+#### checkbox
 ```php
-'enabled' => [
-    'type'    => 'boolean',
-    'field'   => 'checkbox',
-    'default' => false,
-];
+'type'    => 'bool',
+'field'   => 'checkbox',
+'default' => false,
 ```
 
-### number
-
+#### number
 ```php
-'items_per_page' => [
-    'type'    => 'integer',
-    'field'   => 'number',
-    'default' => 10,
-];
+'type'    => 'int',
+'field'   => 'number',
+'default' => 0,
 ```
 
 ---
 
-## Choice Fields
+### Choice Fields
 
-### select
-
+#### select
 ```php
-'layout' => [
-    'type'    => 'string',
-    'field'   => 'select',
-    'default' => 'grid',
-    'options' => [
-        'grid' => 'Grid',
-        'list' => 'List',
-    ],
-];
+'type'    => 'string',
+'field'   => 'select',
+'options' => [
+	'key' => 'Label',
+],
 ```
 
-### radio
-
+#### radio
 ```php
-'mode' => [
-    'type'    => 'string',
-    'field'   => 'radio',
-    'default' => 'basic',
-    'options' => [
-        'basic' => 'Basic',
-        'advanced' => 'Advanced',
-    ],
-];
+'type'    => 'string',
+'field'   => 'radio',
+'options' => [
+	'key' => 'Label',
+],
 ```
 
 ---
 
-## Media Fields
+### Media Fields
 
 All media fields store **attachment IDs**.
 
-### image
-
+#### image
 ```php
-'logo' => [
-    'type'  => 'integer',
-    'field' => 'image',
-];
+'type'  => 'int',
+'field' => 'image',
 ```
 
-### audio
-
+#### audio
 ```php
-'intro_audio' => [
-    'type'  => 'integer',
-    'field' => 'audio',
-];
+'type'  => 'int',
+'field' => 'audio',
 ```
 
-### video
-
+#### video
 ```php
-'intro_video' => [
-    'type'  => 'integer',
-    'field' => 'video',
-];
+'type'  => 'int',
+'field' => 'video',
 ```
 
-### document
-
+#### document
 ```php
-'terms_pdf' => [
-    'type'     => 'integer',
-    'field'    => 'document',
-    'max_size' => 2 * MB_IN_BYTES,
-];
+'type'  => 'int',
+'field' => 'document',
 ```
 
 ---
 
-## Popup Filtering Note
+## Notes and Guarantees
 
-WordPress guarantees popup filtering only for:
+- `type` controls data safety, not UI
+- `field` controls rendering, not storage
+- Conditions affect admin visibility only
+- Frontend code must never rely on conditions
+- Missing values must always fall back to defaults
+- Unknown keys are ignored safely
 
-- image
-- audio
-- video
+---
 
-Other media types are enforced after selection and on save.
+## Final Rule
+
+If a field definition is unclear, make it explicit.
+Explicit configuration always wins over convenience.

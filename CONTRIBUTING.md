@@ -44,6 +44,9 @@ If a change makes the system easier to misuse, it will be rejected.
 
 - `wp-plugin-boilerplate.php` must remain wiring-only
 - No logic, conditionals, or side effects are allowed there
+- PublicPlugin (or equivalent) must always be registered unconditionally
+- Do not gate frontend behavior behind `is_admin()` during bootstrap
+
 
 ### 2. Hook registration
 
@@ -70,7 +73,7 @@ If a change makes the system easier to misuse, it will be rejected.
 - Migrations must not produce side effects
 - Data loss must be explicit and intentional
 
-### 6. Entry file discipline
+### 6. Exit file discipline
 
 - `uninstall.php` must remain procedural and self-contained
 - Plugin classes and autoloaders must never be referenced during uninstall

@@ -1,194 +1,73 @@
 # Advanced Topics
 
-This document covers advanced capabilities built into the WP Plugin Boilerplate.
-These features are optional, but they exist to support real-world, long-lived plugins.
-
-Link this document from the main README instead of duplicating details.
+This document explains architectural constraints that protect v1.0 stability.
 
 ---
 
-## Multisite Awareness
+## Runtime Wiring
 
-The boilerplate supports WordPress multisite without assuming it.
+Public behavior must always be registered unconditionally.
 
-### Core idea
+Do not gate hook registration behind execution context checks.
+Let WordPress control when hooks fire.
 
-Each settings tab explicitly declares its storage scope:
-
-- `site` → per-site settings
-- `network` → network-wide settings
-
-There is no automatic switching at runtime.
-Scope is a **design-time decision**, not a conditional.
-
-### How scope works
-
-- Site-scoped settings tabs use:
-    - `get_option()`
-    - `update_option()`
-- Network-scoped settings tabs use:
-    - `get_site_option()`
-    - `update_site_option()`
-
-The settings repository handles this internally.
-No other code should access options directly.
-
-### UI behavior
-
-- Network-scoped tabs are visible **only** in Network Admin
-- Site-scoped tabs appear in normal site admin
-- Capability checks are enforced in addition to scope
-
-This prevents accidental cross-site configuration leaks.
-
-### Default behavior
-
-On single-site installs:
-
-- all settings behave as `site` scope
-- no multisite-specific behavior is triggered
-
-Multisite support never alters single-site behavior.
+Context checks belong inside callbacks, not around registration.
 
 ---
 
-## Settings Migrations
+## Settings as a Domain Boundary
 
-Settings are designed to evolve safely over time.
+Settings are domain data shared between admin and runtime.
 
-### Why migrations exist
+- Admin writes settings
+- Public reads settings
+- Settings do not depend on Admin or Public
 
-Migrations allow you to:
-
-- add new settings without breaking existing installs
-- change defaults safely
-- restructure configuration gradually
-
-There are:
-
-- no activation-time upgrade hooks
-- no one-off migration scripts
-
-Migrations run lazily when settings are read.
-
-### Failure philosophy
-
-If a migration fails:
-
-- the plugin must continue operating with the last valid data
-- partial migrations must not corrupt stored settings
-
-Migrations should be written defensively and assume imperfect data.
+Settings are owned directly by tabs.
+There is no schema or persistence abstraction layer.
 
 ---
 
-## Schema Versioning
+## Capability Semantics
 
-Schemas may implement `MigratableSchemaContract`.
+Capabilities are not hierarchical.
 
-### Example
+Menu visibility is determined dynamically:
+A menu is visible if the current user can access at least one tab.
 
-```php
-class AdvancedSchema implements MigratableSchemaContract
-{
-    public static function version(): int
-    {
-        return 2;
-    }
-
-    public static function migrate(array $old, int $from_version): array
-    {
-        if ($from_version < 2) {
-            $old['api_timeout'] = $old['api_timeout'] ?? 30;
-        }
-
-        return $old;
-    }
-}
-```
-
-### Rules
-
-- Migrations must be idempotent
-- Migrations must not produce side effects
-- Migrations must be safe to run multiple times
-- Existing values must not be deleted silently
+Tabs enforce their own capabilities at runtime.
 
 ---
 
-## Per-Tab Capabilities
+## Import, Export, and Reset Scope
 
-Each settings tab declares its own access policy.
-
-Tabs specify:
-
-- a capability required to view the tab
-- a capability required to modify settings
-
-This allows:
-
-- read-only tabs
-- admin-only tabs
-- network-admin-only tabs
-- future custom role support
-
-Capabilities are enforced:
-
-- when rendering the UI
-- when saving, resetting, importing, or exporting settings
-
-UI checks are not treated as security.
-Server-side enforcement is mandatory.
-
----
-
-## Import and Export Scope
-
-Import and Export are **global operations**.
-
-They operate across all settings tabs and therefore:
-
-- are protected by a plugin-level capability
-- do not resolve or enforce tab-specific capabilities
-- use global, action-specific nonces
-
-This is intentional.
-
-Reset remains a **tab-scoped operation** and enforces the active tab’s capability and nonce.
+- Import / Export → global operations
+- Reset → tab-scoped operation
 
 Capability scope must match data scope.
 
-### Tools Tab
+---
 
-Import and export actions live in a dedicated **Tools** tab.
+## Lifecycle Boundaries
 
-This keeps:
+- Activation must not mutate runtime state
+- Deactivation stops behavior without deleting data
+- Uninstall runs in isolation and must remain procedural
 
-- configuration tabs focused
-- destructive actions explicit
-- permissions centralized
+Uninstall deletes ownership, not individual options.
 
 ---
 
 ## What Not To Do
 
-- Do not call `get_option()` or `get_site_option()` directly
-- Do not run migrations on plugin activation
-- Do not share option keys between tabs
-- Do not bypass capability checks for convenience
-
-Breaking these rules undermines the architecture.
+- Call `get_option()` directly
+- Gate runtime wiring during bootstrap
+- Share option keys across tabs
+- Treat Admin as a catch-all layer
 
 ---
 
-## When to Use These Features
+## Final Note
 
-Use advanced features when:
-
-- your plugin will live across multiple versions
-- your plugin runs on multisite
-- you need strict permission boundaries
-- settings are business-critical
-
-If you do not need them, ignore them.
-The boilerplate does not force complexity.
+The boilerplate is intentionally strict.
+The constraints are what make v1.0 stable.

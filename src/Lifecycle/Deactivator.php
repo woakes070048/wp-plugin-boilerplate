@@ -13,6 +13,7 @@ class Deactivator {
 		 * Only runtime cleanup should live here.
 		 */
 
+		update_option( Plugin::prefix() . 'status', false );
 		do_action(  Plugin::prefix() . 'deactivated' );
 	}
 }

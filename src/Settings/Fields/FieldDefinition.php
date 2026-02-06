@@ -34,8 +34,7 @@ final class FieldDefinition
 		$self->options = $schema['options'] ?? array();
 		$self->meta = $schema;
 
-		$self->field = $schema['field']
-			?? self::inferFieldType($self->type);
+		$self->field = $schema['field'] ?? self::inferFieldType($self->type);
 
 		return $self;
 	}

@@ -10,6 +10,48 @@ This project follows a **foundation-first** release model:
 
 ---
 
+# Changelog
+
+## [1.0.0] — 2026-02-06 – Stable Foundation Release
+
+This is the first **stable** release of WP Plugin Boilerplate.
+
+v1.0.0 marks the point where the architecture has been validated by building and
+stress-testing real plugins across admin, frontend, lifecycle, and rename scenarios.
+
+### Added
+- Clear separation between Admin, Settings, and Public runtime layers
+- Unconditional runtime wiring for public behavior
+- Tab-based settings ownership (no schema layer)
+- Deterministic uninstall with prefix-based cleanup
+- Dynamic menu capability resolution based on tab visibility
+- Fully documented field definition structure
+- Explicit lifecycle guarantees (activation, deactivation, uninstall)
+
+### Changed
+- Settings are now fully owned by tabs
+- Import / Export scoped as global operations
+- Reset scoped as tab-specific operation
+- Documentation rewritten to reflect v1.0 architecture
+- Advanced Topics rewritten as architectural reference
+
+### Fixed
+- Capability mismatch between menu visibility and tab access
+- Uninstall not cleaning up all plugin-owned options
+- Runtime behavior incorrectly gated during bootstrap
+- Documentation drift from actual architecture
+
+### Stability Guarantees
+Starting with v1.0.0:
+- Public behavior is always registered at runtime
+- Admin configuration flows cleanly into frontend behavior
+- Plugin lifecycle behavior is predictable and safe
+- Plugin can be renamed and reused without breaking behavior
+
+Breaking these guarantees requires a major version bump.
+
+---
+
 ## [v0.9.6] — 2026-02-06
 
 ### Fixed

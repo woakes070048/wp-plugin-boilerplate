@@ -130,8 +130,8 @@ class Admin
 	{
 		add_menu_page(
 			'WP Plugin Boilerplate',
-			'WP Boilerplate',
-			'manage_options',
+			'WP Plugin Boilerplate',
+			$this->resolve_menu_capability(),
 			Plugin::slug(),
 			[ $this, 'render_page' ],
 			'dashicons-admin-generic'
@@ -146,8 +146,8 @@ class Admin
 		add_submenu_page(
 			Plugin::menu_parent(),
 			'WP Plugin Boilerplate',
-			'WP Boilerplate',
-			'manage_options',
+			'WP Plugin Boilerplate',
+			$this->resolve_menu_capability(),
 			Plugin::slug(),
 			[ $this, 'render_page' ]
 		);
@@ -173,4 +173,45 @@ class Admin
 			);
 		}
 	}
+
+	private function resolve_menu_capability(): string
+	{
+		$tabs = Tabs::all();
+
+		// Default to the most restrictive capability
+		$selected_capability = 'manage_options';
+		$max_role_count = 0;
+
+		foreach ($tabs as $tab) {
+			$capability = $tab->manageCapability();
+			$role_count = $this->count_roles_with_capability($capability);
+
+			if ($role_count > $max_role_count) {
+				$max_role_count = $role_count;
+				$selected_capability = $capability;
+			}
+		}
+
+		return $selected_capability;
+	}
+
+	private function count_roles_with_capability(string $capability): int
+	{
+		global $wp_roles;
+
+		if (! $wp_roles) {
+			return 0;
+		}
+
+		$count = 0;
+
+		foreach ($wp_roles->roles as $role) {
+			if (! empty($role['capabilities'][ $capability ])) {
+				$count++;
+			}
+		}
+
+		return $count;
+	}
+
 }
