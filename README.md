@@ -5,19 +5,45 @@
 ![Downloads](https://img.shields.io/github/downloads/golchha21/wp-plugin-boilerplate/total)
 ![License](https://img.shields.io/github/license/golchha21/wp-plugin-boilerplate)
 
-An opinionated, OOP-first WordPress plugin boilerplate focused on **long-term stability**, **explicit architecture**, and **predictable behavior**.
+An opinionated WordPress plugin boilerplate for building **long-lived plugins** with explicit structure and predictable lifecycle behavior.
 
-This boilerplate is designed for plugins that are expected to live for years, evolve safely, and be maintained by more than one developer.
+This project does not provide user-facing features and does not try to replace WordPress conventions, Git workflows, or existing development practices.
+
+It exists to provide a constrained starting point for plugins that are expected to grow over time — where admin configuration, settings, frontend behavior, and lifecycle concerns tend to blur and accumulate accidental complexity.
+
+If you are building a small, short-lived plugin, this may feel like more structure than you need. If you are maintaining plugins over years, with evolving requirements or multiple contributors, the constraints are intentional.
+
+---
+
+## Who This Is Not For
+
+This boilerplate is probably **not** a good fit if:
+
+- You are building a small, one-off plugin
+- You prefer ad-hoc patterns over explicit structure
+- You are comfortable managing complexity manually as a plugin grows
+- You want quick scaffolding with minimal constraints
+- You are looking for a plugin that provides user-facing features
+
+The constraints in this project are intentional and opinionated.
+They trade short-term convenience for long-term predictability.
 
 ---
 
 ## Core Principles
 
-- Single entry point for orchestration
-- Centralized hook registration via a Loader
-- Clear separation between Admin, Settings, and Public runtime
-- Explicit capability and scope rules
-- Deterministic lifecycle behavior
+- Clear separation between admin, settings, and public runtime
+- Settings treated as a domain boundary, not just UI configuration
+- Unconditional runtime wiring with context resolved at execution time
+- Predictable, testable lifecycle behavior
+- Minimal magic and no hidden side effects
+- Deliberate constraints to reduce long-term drift
+
+---
+
+## What Problem This Solves (In Practice)
+
+This boilerplate is meant for plugins that start simple and then gradually accumulate settings, frontend behavior, permissions, and lifecycle edge cases. Over time, those concerns tend to bleed into each other, making changes harder and riskier than they need to be. The structure here exists to keep those boundaries explicit from the start, so growth doesn’t automatically mean increasing fragility or rewrites later on.
 
 ---
 
@@ -33,6 +59,7 @@ This boilerplate is designed for plugins that are expected to live for years, ev
 | `assets`         | CSS, JS, static assets |
 | `vendor`         | Bundled dependencies (shipped with the plugin) |
 
+Each directory represents a deliberate boundary. Code should not cross layers without an explicit reason.
 The `vendor/` directory is part of the distributed plugin and must not be removed.
 It exists to support internal architecture and requires no action from plugin authors.
 
@@ -46,6 +73,8 @@ All required dependencies are already included in the repository.
 You do **not** need to run Composer, install build tools, or perform any setup beyond installing and activating the plugin.
 
 If you are extending the boilerplate to build a plugin, you can start writing code immediately inside the `src/` directory.
+
+Composer is only required if you choose to modify or add dependencies yourself.
 
 If the plugin is not working after cloning the repository, ensure the `vendor/` directory is present. If it is missing, reinstall the plugin from a clean copy.
 
@@ -73,9 +102,9 @@ Direct calls to `get_option()` or `get_site_option()` are considered architectur
 
 - Classes define behavior
 - Tabs define configuration boundaries
+- Settings connect admin and runtime
 - Admin configures behavior
 - Public executes behavior
-- Settings connect admin and runtime
 - Uninstall runs outside the plugin context and must remain procedural
 
 ---
@@ -85,10 +114,9 @@ Direct calls to `get_option()` or `get_site_option()` are considered architectur
 This boilerplate is a good fit if:
 
 - your plugin has frontend behavior
-- your plugin must survive renames and refactors
-- settings are business-critical
-- multisite support matters
-- long-term maintainability matters
+- settings and permissions matter
+- the plugin is expected to evolve over time
+- long-term maintainability is a priority
 
 If you are building a quick, disposable plugin, this may be more structure than you need.
 

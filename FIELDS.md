@@ -1,7 +1,6 @@
 # Fields Reference
 
-This document defines the **complete field definition structure** supported by the
-WP Plugin Boilerplate as of **v1.0**.
+This document defines the **complete field definition structure** supported by the WP Plugin Boilerplate as of **v1.0**.
 
 Fields are **tab-owned**, **explicit**, and **deterministic**.
 There is no schema layer and no implicit behavior.

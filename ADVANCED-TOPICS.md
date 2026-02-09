@@ -50,7 +50,7 @@ Capability scope must match data scope.
 
 ## Lifecycle Boundaries
 
-- Activation must not mutate runtime state
+- Activation must not mutate runtime behavior outside explicit, one-time synchronization
 - Deactivation stops behavior without deleting data
 - Uninstall runs in isolation and must remain procedural
 

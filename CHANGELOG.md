@@ -10,6 +10,19 @@ This project follows a **foundation-first** release model:
 
 ---
 
+## [1.0.2] – 2026-02-09
+
+### Changed
+- README clarified to better define scope and intended audience
+- Documentation polished and aligned with final v1.x architecture
+- Field reference updated to list all supported options
+- `.gitignore` finalized
+
+### Fixed
+- Minor documentation inconsistencies
+
+---
+
 ## [1.0.1] – 2026-02-09
 
 ### Added

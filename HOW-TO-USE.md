@@ -11,12 +11,14 @@ Start by making the boilerplate yours.
 
 - Rename the plugin directory
 - Rename the main plugin file
-- Update the namespace, prefix, and text domain by replacing all boilerplate identifiers  (`wp-plugin-boilerplate`, `WPPluginBoilerplate`, `WP Plugin Boilerplate`, `WPPB_`, `wppb_`, `WPPB-`, `wppb-`)
+- Update the namespace, prefix, and text domain by replacing all boilerplate identifiers: (`wp-plugin-boilerplate`, `WPPluginBoilerplate`, `WP Plugin Boilerplate`, `WPPB_`, `wppb_`, `WPPB-`, `wppb-`)
 - Regenerate the autoloader:
 
 ```bash
 composer dump-autoload
+```
 
+After this step, the plugin should activate cleanly under its new identity, with no references to the original boilerplate remaining.
 
 ---
 
@@ -28,7 +30,7 @@ A settings tab owns:
 - its option key
 - default values
 - sanitization rules
-- storage scope
+- storage scope (site or network)
 - capability enforcement
 
 There is no schema abstraction.
@@ -37,7 +39,7 @@ There is no schema abstraction.
 
 ## Step 3: Add Runtime Behavior
 
-Runtime behavior lives in `PublicPlugin` (or equivalent).
+Runtime behavior lives in `PublicPlugin` (or an equivalent class).
 
 Public behavior must always be registered unconditionally by the Plugin orchestrator.
 
