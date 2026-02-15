@@ -10,6 +10,17 @@ This project follows a **foundation-first** release model:
 
 ---
 
+## v1.1.0 – 2026-02-15
+
+- Refactored field architecture
+- Added Repeater field
+- Added Multiple Media support
+- Migrated admin layout to CSS Grid
+- Introduced semantic design tokens
+- Improved admin UI consistency
+
+---
+
 ## [1.0.2] – 2026-02-09
 
 ### Changed

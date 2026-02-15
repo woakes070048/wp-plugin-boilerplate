@@ -5,7 +5,6 @@ namespace WPPluginBoilerplate\Settings\Tabs;
 use WPPluginBoilerplate\Plugin;
 use WPPluginBoilerplate\Settings\Contracts\SettingsContract;
 use WPPluginBoilerplate\Settings\Contracts\TabContract;
-use WPPluginBoilerplate\Settings\Schemas\EnhancedFieldsSchema;
 
 class EnhancedFieldsTab implements TabContract, SettingsContract
 {
@@ -16,7 +15,7 @@ class EnhancedFieldsTab implements TabContract, SettingsContract
 
 	public function label(): string
 	{
-		return 'EnhancedFields';
+		return 'Enhanced Fields';
 	}
 
 	public function hasForm(): bool
@@ -50,6 +49,7 @@ class EnhancedFieldsTab implements TabContract, SettingsContract
 			'media' => array(
 				'type' => 'integer',
 				'field' => 'media',
+				'multiple' => true,
 			),
 
 			'file' => array(
@@ -92,7 +92,8 @@ class EnhancedFieldsTab implements TabContract, SettingsContract
 				'type' => 'string',
 				'field' => 'editor',
 				'rows' => 8,
-				'media_buttons' => false,
+				'media_buttons' => true,
+				'class' => 'width-8',
 			),
 		);
 	}

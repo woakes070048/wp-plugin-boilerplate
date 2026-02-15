@@ -4,7 +4,7 @@ namespace WPPluginBoilerplate\Settings\Fields;
 
 use WPPluginBoilerplate\Settings\Support\WPMimeGroups;
 
-final class FieldDefinition
+class FieldDefinition
 {
 	public string $key;
 	public string $type;
@@ -12,51 +12,32 @@ final class FieldDefinition
 	public string $label;
 	public string $description;
 	public mixed $default;
-	public $sanitize;
+	public mixed $sanitize;
 	public array $options;
 	public array $meta;
 
-
-	private function __construct()
+	public function __construct(string $key, array $schema)
 	{
+		$this->key         = $key;
+		$this->meta        = $schema;
+
+		$type              = $schema['type'] ?? 'string';
+
+		$this->type        = $type;
+		$this->field       = $schema['field'] ?? $this->inferField($type);
+		$this->label       = $schema['label'] ?? $this->humanize($key);
+		$this->description = $schema['description'] ?? '';
+		$this->default     = $schema['default'] ?? $this->defaultValue($this->field);
+		$this->options     = $schema['options'] ?? [];
+		$this->sanitize    = $schema['sanitize'] ?? $this->defaultSanitizer($type);
 	}
 
 	public static function fromSchema(string $key, array $schema): self
 	{
-		$self = new self();
-
-		$self->key = $key;
-		$self->type = $schema['type'] ?? 'string';
-		$self->default = $schema['default'] ?? null;
-		$self->sanitize = $schema['sanitize'] ?? self::defaultSanitizer($self->type);
-		$self->label = $schema['label'] ?? self::humanize($key);
-		$self->description = $schema['description'] ?? '';
-		$self->options = $schema['options'] ?? array();
-		$self->meta = $schema;
-
-		$self->field = $schema['field'] ?? self::inferFieldType($self->type);
-
-		return $self;
+		return new self($key, $schema);
 	}
 
-
-	private static function defaultSanitizer(string $type): callable|string
-	{
-		return match ($type) {
-			'boolean' => 'rest_sanitize_boolean',
-			'integer', 'number' => 'absint',
-			default => 'sanitize_text_field',
-		};
-	}
-
-
-	private static function humanize(string $key): string
-	{
-		return ucwords(str_replace('_', ' ', $key));
-	}
-
-
-	private static function inferFieldType(string $type): string
+	protected function inferField(string $type): string
 	{
 		return match ($type) {
 			'boolean' => 'checkbox',
@@ -66,38 +47,35 @@ final class FieldDefinition
 		};
 	}
 
-
-	public function resolvedDefault(): mixed
+	protected function defaultSanitizer(string $type): callable|string
 	{
-		if ($this->default !== null) {
-			return $this->default;
-		}
+		return match ($type) {
+			'boolean' => 'rest_sanitize_boolean',
+			'integer', 'number' => 'absint',
+			default => 'sanitize_text_field',
+		};
+	}
 
-		return match ($this->field) {
+	protected function defaultValue(string $field): mixed
+	{
+		return match ($field) {
 			'checkbox' => false,
-			'number',
-			'range' => 0,
-			'multiselect' => array(),
-			'select',
-			'radio',
-			'text',
-			'textarea',
-			'email',
-			'url',
-			'password',
-			'hidden',
-			'date',
-			'time',
-			'datetime-local',
-			'color',
-			'editor' => '',
-			'media',
-			'image',
-			'file' => 0,
+			'number', 'range' => 0,
+			'multiselect' => [],
+			'media', 'image', 'file', 'document', 'audio', 'video', 'archive' => 0,
 			default => '',
 		};
 	}
 
+	public function resolvedDefault(): mixed
+	{
+		return $this->default;
+	}
+
+	protected function humanize(string $key): string
+	{
+		return ucwords(str_replace('_', ' ', $key));
+	}
 
 	public function allowedMimes(): ?array
 	{

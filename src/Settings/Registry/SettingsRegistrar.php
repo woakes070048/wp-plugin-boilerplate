@@ -33,23 +33,15 @@ class SettingsRegistrar
 
 			$field = FieldDefinition::fromSchema($field_key, $definition);
 
-			add_settings_field(
-				$field->key,
-				esc_html($field->label),
-				function () use ($tab, $field) {
+			add_settings_field($field->key, esc_html($field->label), function () use ($tab, $field) {
 
 					$values = SettingsRepository::get($tab::optionKey());
 					$raw = $values[$field->key] ?? null;
 
-					$value = ($raw === null || $raw === 'null')
-						? $field->resolvedDefault()
-						: $raw;
-
-					FieldRenderer::render(
-						$tab::optionKey(),
-						$field,
-						$value
-					);
+					$value = ($raw === null || $raw === 'null') ? $field->resolvedDefault() : $raw;
+					echo '<div class="wppb-fields-row">';
+					FieldRenderer::render($tab::optionKey(), $field, $value);
+					echo '</div>';
 				},
 				$option_key,
 				'default'

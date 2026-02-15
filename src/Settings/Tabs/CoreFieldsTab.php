@@ -5,7 +5,6 @@ namespace WPPluginBoilerplate\Settings\Tabs;
 use WPPluginBoilerplate\Plugin;
 use WPPluginBoilerplate\Settings\Contracts\SettingsContract;
 use WPPluginBoilerplate\Settings\Contracts\TabContract;
-use WPPluginBoilerplate\Settings\Schemas\CoreFieldsSchema;
 
 class CoreFieldsTab implements TabContract, SettingsContract
 {
@@ -55,6 +54,8 @@ class CoreFieldsTab implements TabContract, SettingsContract
 			'textarea' => array(
 				'type' => 'string',
 				'field' => 'textarea',
+				'rows' => 8,
+				'class' => 'width-8',
 			),
 
 			'email' => array(
@@ -85,8 +86,9 @@ class CoreFieldsTab implements TabContract, SettingsContract
 			'number' => array(
 				'type' => 'integer',
 				'field' => 'number',
-				'min' => null,
-				'max' => null,
+				'min' => 0,
+				'max' => 100,
+				'step' => 10,
 			),
 
 			'range' => array(
@@ -94,6 +96,7 @@ class CoreFieldsTab implements TabContract, SettingsContract
 				'field' => 'range',
 				'min' => 0,
 				'max' => 100,
+				'step' => 10,
 			),
 
 			'select' => array(

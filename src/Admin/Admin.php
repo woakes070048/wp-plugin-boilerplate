@@ -46,7 +46,7 @@ class Admin
 		$tabs = Tabs::all();
 		$active = Tabs::active();
 
-		echo '<div class="wrap">';
+		echo '<div class="wrap wppb-admin">';
 		echo '<h1>WP Plugin Boilerplate</h1>';
 		echo '<nav class="nav-tab-wrapper">';
 
@@ -97,6 +97,7 @@ class Admin
 
 		wp_enqueue_script(Plugin::prefix() . 'media', Plugin::url() . 'assets/admin/js/media.js', ['jquery'], Plugin::version(), true);
 		wp_enqueue_script(Plugin::prefix() . 'tools', Plugin::url() . 'assets/admin/js/tools.js', ['jquery'], Plugin::version(), true);
+		wp_enqueue_script(Plugin::prefix() . 'repeater', Plugin::url() . 'assets/admin/js/repeater.js', ['jquery'], Plugin::version(), true);
 
 		// Color picker
 		wp_enqueue_style('wp-color-picker');

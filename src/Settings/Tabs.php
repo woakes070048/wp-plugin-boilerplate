@@ -6,6 +6,7 @@ use WPPluginBoilerplate\Settings\Contracts\TabContract;
 use WPPluginBoilerplate\Settings\Tabs\AboutTab;
 use WPPluginBoilerplate\Settings\Tabs\CoreFieldsTab;
 use WPPluginBoilerplate\Settings\Tabs\EnhancedFieldsTab;
+use WPPluginBoilerplate\Settings\Tabs\FeatureFieldsTab;
 use WPPluginBoilerplate\Settings\Tabs\HelpTab;
 use WPPluginBoilerplate\Settings\Tabs\ToolsTab;
 
@@ -61,6 +62,7 @@ class Tabs
 		$tabs = array(
 			new CoreFieldsTab(),
 			new EnhancedFieldsTab(),
+			new FeatureFieldsTab(),
 			new ToolsTab(),
 			new AboutTab(),
 			new HelpTab(),

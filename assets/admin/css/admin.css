@@ -1,0 +1,395 @@
+/* =========================================
+   WP Plugin Boilerplate – Settings Layout
+   Grid Based System
+   Scoped under .wppb-admin
+========================================= */
+
+.wppb-admin {
+
+  /* ===============================
+     Design Tokens
+  =============================== */
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+
+  --surface-1: #ffffff;
+  --surface-2: #f6f7f7;
+  --surface-3: #f0f0f1;
+
+  --border-default: #ddd;
+  --border-muted: #dcdcde;
+
+  --text-primary: #1d2327;
+  --text-muted: #646970;
+
+  --accent: #2271b1;
+  --accent-hover: #135e96;
+
+  --danger: #b32d2e;
+  --danger-hover: #8c1f1f;
+
+  --success: #00a32a;
+
+  --transition-fast: 0.15s ease;
+}
+
+
+/* =========================================
+   Safe Button Overrides
+========================================= */
+
+.wppb-admin .button {
+  height: auto;
+}
+
+.wppb-admin .button.wppb-repeater-add {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: fit-content;
+}
+
+
+/* =========================================
+   Field Wrapper
+========================================= */
+
+.wppb-admin .wppb-field {
+  box-sizing: border-box;
+}
+
+.wppb-admin .wppb-field input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+.wppb-admin .wppb-field textarea,
+.wppb-admin .wppb-field select {
+  width: 100%;
+}
+
+/* Checkbox & Radio Layout */
+
+.wppb-admin .wppb-field input[type="checkbox"],
+.wppb-admin .wppb-field input[type="radio"] {
+  /*width: auto;*/
+  margin-right: var(--space-1);
+}
+
+.wppb-admin .wppb-field label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.wppb-admin .wppb-checkbox-group,
+.wppb-admin .wppb-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* =========================================
+   GRID SYSTEM (12 Column)
+========================================= */
+
+.wppb-admin .wppb-fields-row,
+.wppb-admin .wppb-repeater-row {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-4);
+}
+
+.wppb-admin .wppb-field.width,
+.wppb-admin .wppb-repeater-item.width {
+  grid-column: span 12;
+}
+
+.wppb-admin .wppb-field.width-1  { grid-column: span 1; }
+.wppb-admin .wppb-field.width-2  { grid-column: span 2; }
+.wppb-admin .wppb-field.width-3  { grid-column: span 3; }
+.wppb-admin .wppb-field.width-4  { grid-column: span 4; }
+.wppb-admin .wppb-field.width-5  { grid-column: span 5; }
+.wppb-admin .wppb-field.width-6  { grid-column: span 6; }
+.wppb-admin .wppb-field.width-7  { grid-column: span 7; }
+.wppb-admin .wppb-field.width-8  { grid-column: span 8; }
+.wppb-admin .wppb-field.width-9  { grid-column: span 9; }
+.wppb-admin .wppb-field.width-10 { grid-column: span 10; }
+.wppb-admin .wppb-field.width-11 { grid-column: span 11; }
+.wppb-admin .wppb-field.width-12 { grid-column: span 12; }
+
+
+/* =========================================
+   Repeater
+========================================= */
+
+.wppb-admin .wppb-repeater-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.wppb-admin .wppb-repeater {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.wppb-admin .wppb-repeater-item {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  overflow: hidden;
+  transition: transform var(--transition-fast);
+}
+
+.wppb-admin .wppb-repeater-item:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.wppb-admin .wppb-repeater-item.is-dragging {
+  opacity: 0.5;
+}
+
+.wppb-admin .wppb-repeater-item.is-collapsed .wppb-repeater-body {
+  display: none;
+}
+
+
+/* Header */
+
+.wppb-admin .wppb-repeater-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.wppb-admin .wppb-repeater-left {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.wppb-admin .wppb-repeater-title {
+  font-weight: 600;
+}
+
+.wppb-admin .wppb-repeater-drag {
+  cursor: grab;
+  color: var(--text-muted);
+}
+
+.wppb-admin .wppb-repeater-controls {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.wppb-admin .wppb-repeater-toggle,
+.wppb-admin .wppb-repeater-duplicate,
+.wppb-admin .wppb-repeater-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: background var(--transition-fast),
+  color var(--transition-fast);
+}
+
+.wppb-admin .wppb-repeater-toggle:hover,
+.wppb-admin .wppb-repeater-duplicate:hover,
+.wppb-admin .wppb-repeater-remove:hover {
+  background: var(--surface-3);
+  border-radius: var(--radius-sm);
+}
+
+.wppb-admin .wppb-repeater-remove:hover {
+  color: var(--danger);
+}
+
+.wppb-admin .wppb-repeater-duplicate:hover {
+  color: var(--accent);
+}
+
+.wppb-admin .wppb-repeater-body {
+  padding: var(--space-4);
+}
+
+
+/* =========================================
+   Media Grid
+========================================= */
+
+.wppb-admin .wppb-media-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.wppb-admin .wppb-media-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-3);
+}
+
+
+/* =========================================
+   Square Media Preview System
+========================================= */
+
+.wppb-admin .wppb-media-item,
+.wppb-admin .wppb-media-single {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  overflow: hidden;
+  transition: box-shadow var(--transition-fast);
+}
+
+.wppb-admin .wppb-media-item:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* Square container */
+.wppb-admin .wppb-media-item-body,
+.wppb-admin .wppb-media-single {
+
+  position: relative;
+  /*width: 100%;*/
+  aspect-ratio: 1 / 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--space-3);
+  overflow: hidden;
+}
+
+
+/* Image handling */
+.wppb-admin .wppb-media-item-body img,
+.wppb-admin .wppb-media-single img {
+
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+
+/* Code / filename handling */
+.wppb-admin .wppb-media-item-body code,
+.wppb-admin .wppb-media-single code {
+
+  display: block;
+  max-width: 100%;
+
+  padding: var(--space-2);
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+
+  overflow-x: auto;
+  /*white-space: nowrap;*/
+}
+
+
+/* Media Header */
+
+.wppb-admin .wppb-media-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.wppb-admin .wppb-media-drag {
+  cursor: grab;
+  color: var(--text-muted);
+}
+
+.wppb-admin .wppb-media-item-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--danger);
+  padding: 0;
+}
+
+.wppb-admin .wppb-media-item-remove:hover {
+  color: var(--danger-hover);
+}
+
+
+/* Media Actions */
+
+.wppb-admin .wppb-media-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.wppb-admin .wppb-media-select,
+.wppb-admin .wppb-media-remove {
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+
+  background: var(--surface-2);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-sm);
+
+  cursor: pointer;
+  transition: background var(--transition-fast),
+  border-color var(--transition-fast);
+}
+
+.wppb-admin .wppb-media-select:hover {
+  background: var(--surface-3);
+}
+
+.wppb-admin .wppb-media-remove:hover {
+  background: #fdeaea;
+  border-color: var(--danger);
+}
+
+.wppb-admin .wppb-media-remove:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* =========================================
+   Responsive
+========================================= */
+
+@media (max-width: 782px) {
+
+  .wppb-admin .wppb-fields-row,
+  .wppb-admin .wppb-repeater-row {
+    grid-template-columns: 1fr;
+  }
+
+  .wppb-admin .wppb-field {
+    grid-column: span 12 !important;
+  }
+}
